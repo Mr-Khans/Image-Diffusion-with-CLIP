@@ -47,9 +47,10 @@ def interrogate_images(image_path_1: str, image_path_2: str) -> Tuple[List[str],
     """
     image_1 = Image.open(image_path_1).convert('RGB')
     image_2 = Image.open(image_path_2).convert('RGB')
+
     ci = Interrogator(Config(clip_model_name="ViT-H-14/laion2b_s32b_b79k"))
-    prompt_1 = ci.interrogate(image_1)
-    prompt_2 = ci.interrogate(image_2)
+    prompt_1 = ci.interrogate_fast(image_1)
+    prompt_2 = ci.interrogate_fast(image_2)
     return prompt_1, prompt_2
 
 def initialize_image(image_path: str) -> Image:
@@ -100,7 +101,7 @@ if __name__ == "__main__":
         prompt = "ultra detailed, photorealistic, " + prompt_2 + " high detail, high quality,8K,photo realism",
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_1,
-        num_inference_steps = int(25),
+        num_inference_steps = int(35),
         strength = 0.65,
         guidance_scale = 7).images
     image[0].save("sd_1.png")
@@ -110,7 +111,7 @@ if __name__ == "__main__":
         prompt = "ultra detailed, photorealistic, " + prompt_1 + " high detail, high quality, 8K, photo realism",
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_2,
-        num_inference_steps = int(25),
+        num_inference_steps = int(35),
         strength = 0.65,
         guidance_scale = 7).images
     image[0].save("sd_2.png")
