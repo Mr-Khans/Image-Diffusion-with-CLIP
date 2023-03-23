@@ -1,0 +1,13 @@
+diffusers==0.7.2
+transformers==4.24.0
+scipy==1.7.3
+ftfy==6.1.1
+python-dotenv>=0.20.0
+huggingface_hub==0.10.1
+Pillow==9.0.0
+ipywidgets>=7,<8
+torch
+torchvision
+clip-interrogator==0.6.0
+accelerate
+https://github.com/huggingface/diffusers/archive/main.zip
