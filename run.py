@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
   with autocast("cuda"):
     image = pipe(
-        prompt = prompt_2,
+        prompt = "ultra detailed photorealistic" + prompt_2,
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_1,
         num_inference_steps = int(25),
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
   with autocast("cuda"):
     image = pipe(
-        prompt = prompt_1,
+        prompt = "ultra detailed photorealistic" + prompt_1,
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_2,
         num_inference_steps = int(25),
