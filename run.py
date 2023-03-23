@@ -8,6 +8,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionUpscalePipeline, DiffusionPipeline, StableDiffusionDepth2ImgPipeline, DPMSolverMultistepScheduler
+from diffusers import PNDMScheduler, DDIMScheduler, LMSDiscreteScheduler, EulerDiscreteScheduler, DPMSolverMultistepScheduler
 from diffusers import LMSDiscreteScheduler
 from PIL import Image
 from clip_interrogator import Config, Interrogator
@@ -73,9 +74,10 @@ if __name__ == "__main__":
   image_path_1 = argv[1]
   image_path_2 = argv[2]
 
-  model_id = 'stabilityai/stable-diffusion-2'
+  #model_id = 'stabilityai/stable-diffusion-2'
+  model_id = "dreamlike-art/dreamlike-photoreal-2.0"
 
-  scheduler = DPMSolverMultistepScheduler.from_pretrained(model_id, subfolder="scheduler")
+  scheduler = None #DPMSolverMultistepScheduler.from_pretrained(model_id, subfolder="scheduler")
 
   pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
       model_id,
