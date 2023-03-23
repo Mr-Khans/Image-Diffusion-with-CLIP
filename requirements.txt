@@ -9,4 +9,4 @@ torch
 torchvision
 clip-interrogator==0.6.0
 accelerate
-https://github.com/huggingface/diffusers/archive/main.zip
+huggingface_hub>=0.11.0

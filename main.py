@@ -27,7 +27,7 @@ def proof_text(prompt: str) -> str:
     words = prompt.split()
     prompt_del_dublicate = " ".join(sorted(set(words), key=words.index))
     words = prompt_del_dublicate.split()[:50]
-    rompt_del_token = " ".join(words)
+    prompt_del_token = " ".join(words)
     return prompt_del_token
 
 
