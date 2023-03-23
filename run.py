@@ -28,7 +28,7 @@ def proof_text(prompt: str) -> str:
     """
     words = prompt.split()
     prompt_del_dublicate = " ".join(sorted(set(words), key=words.index))
-    words = prompt_del_dublicate.split()[:50]
+    words = prompt_del_dublicate.split()[:15]
     prompt_del_token = " ".join(words)
     return prompt_del_token
 
@@ -92,8 +92,8 @@ if __name__ == "__main__":
   prompt_1 = proof_text(prompt_1)
   prompt_2 = proof_text(prompt_2)
 
-  print(prompt_1)
-  print(prompt_2)
+  #print(prompt_1)
+  #print(prompt_2)
 
   with autocast("cuda"):
     image = pipe(
