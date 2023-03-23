@@ -14,7 +14,7 @@ from clip_interrogator import Config, Interrogator
 
 
 
-def proof_text(prompt: str): -> str:
+def proof_text(prompt: str) -> str:
     """
     This function takes in a string prompt and returns a processed version of the prompt.
     
@@ -24,11 +24,11 @@ def proof_text(prompt: str): -> str:
     Returns:
     - A string representing the processed version of the input prompt.
     """
-  words = prompt.split()
-  prompt_del_dublicate = " ".join(sorted(set(words), key=words.index))
-  words = prompt_del_dublicate.split()[:50]
-  prompt_del_token = " ".join(words)
-  return prompt_del_token
+    words = prompt.split()
+    prompt_del_dublicate = " ".join(sorted(set(words), key=words.index))
+    words = prompt_del_dublicate.split()[:50]
+    rompt_del_token = " ".join(words)
+    return prompt_del_token
 
 
 def interrogate_images(image_path_1: str, image_path_2: str) -> Tuple[List[str], List[str]]:
