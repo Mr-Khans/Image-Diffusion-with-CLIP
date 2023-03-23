@@ -12,7 +12,9 @@ from diffusers import LMSDiscreteScheduler
 from PIL import Image
 from clip_interrogator import Config, Interrogator
 
-
+prompt_1 = "a man in black jacket and is holding cell phone, boromir an anime world, trade offer meme, headshot profile picture, one onion ring, espn, facebook lizard tongue, he got big french musctache, point finger with ring on it, tessgarman, icon, uhq, sun down, kombi"
+prompt_2 = "a green monsterfruit with pear tree in the background, shrek as neo from matrix, he looks like human minion, fbx, square, she has jiggly fat round belly, avatar image, old male, murky dusty deep, photo pinterest, sfw version, standing class, giga chad capaybara, video game"
+  
 
 def proof_text(prompt: str) -> str:
     """
@@ -95,7 +97,7 @@ if __name__ == "__main__":
 
   with autocast("cuda"):
     image = pipe(
-        prompt = "ultra detailed photorealistic" + prompt_2,
+        prompt = "ultra detailed, photorealistic, " + prompt_2 + " high detail, high quality,8K,photo realism",
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_1,
         num_inference_steps = int(25),
@@ -105,7 +107,7 @@ if __name__ == "__main__":
 
   with autocast("cuda"):
     image = pipe(
-        prompt = "ultra detailed photorealistic" + prompt_1,
+        prompt = "ultra detailed, photorealistic, " + prompt_1 + " high detail, high quality, 8K, photo realism",
         negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
         image = init_image_2,
         num_inference_steps = int(25),
