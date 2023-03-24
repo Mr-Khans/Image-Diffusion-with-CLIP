@@ -30,7 +30,7 @@ def proof_text(prompt: str) -> str:
     """
     #words = prompt.split()
     #prompt_del_dublicate = " ".join(sorted(set(words), key=words.index))
-    words = prompt.split()[:15]
+    words = prompt.split()[:28]
     prompt_del_token = " ".join(words)
     return prompt_del_token
 
@@ -69,6 +69,24 @@ def initialize_image(image_path: str) -> Image:
     init_image = init_image.resize((512, 512)).convert("RGB")
     return init_image
 
+#def generate_image(prompt_2: str, init_image_1: Image, num_inference_steps: int, strength: float, guidance_scale: float) -> Image:
+
+def generate_image(prompt_2: str, init_image_1: Image, num_inference_steps: int, strength: float, guidance_scale: float,  generator: int = None) -> Image :
+    if generator is not None:
+      generator = torch.Generator("cuda").manual_seed(generator)
+    with torch.cuda.amp.autocast():
+        image = pipe(
+            prompt = prompt_2,
+            negative_prompt = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy",
+            image = init_image_1,
+            num_inference_steps = num_inference_steps,
+            strength = strength,
+            guidance_scale = guidance_scale,
+            generator = generator
+        ).images
+        #image[0].save("sd_1.png")
+    return image[0]
+
 
 if __name__ == "__main__":
 
@@ -76,17 +94,25 @@ if __name__ == "__main__":
   image_path_2 = argv[2]
 
   #model_id = 'stabilityai/stable-diffusion-2'
+  #model_id = "stabilityai/stable-diffusion-2-1"
   model_id = "dreamlike-art/dreamlike-photoreal-2.0"
 
   scheduler = DPMSolverMultistepScheduler.from_pretrained(model_id, subfolder="scheduler")
 
+  if model_id.startswith("stabilityai/"):
+    model_revision = "fp16"
+  else:
+    model_revision = None
   pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-      model_id,
-      revision="fp16",
+       model_id,
+      revision=model_revision,
       torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
       scheduler=scheduler
     ).to("cuda")
+
   pipe.enable_attention_slicing()
+  pipe.safety_checker = None
+  pipe.enable_xformers_memory_efficient_attention()
 
   prompt_1, prompt_2 = interrogate_images(image_path_1, image_path_2)
 
@@ -96,38 +122,27 @@ if __name__ == "__main__":
   prompt_1 = proof_text(prompt_1)
   prompt_2 = proof_text(prompt_2)
 
-  #print(prompt_1)
-  #print(prompt_2)
-  seed = 121 #random.randint(0, 2147483647)
-  num_inference_steps = int(50)
-  strength = 1
-  guidance_scale = 17
+  #seed = random.randint(0, 2147483647)
+  num_inference_steps_1 = int(30)
+  strength_1 = 0.75
+  guidance_scale_1 = 7.5
 
-  with autocast("cuda"):
-    image = pipe(
-        prompt =  prompt_2 + "ighting, hyperdetailed, 8 k realistic, global illumination, radiant light, frostbite 3 engine, cryengine, trending on artstation, digital art ",
-        negative_prompt = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy",
-        image = init_image_1,
-        num_inference_steps =  num_inference_steps,
-        strength = strength,
-        guidance_scale = guidance_scale,
-        generator = torch.Generator("cuda").manual_seed(seed)).images
-    image[0].save("sd_1.png")
-    print(f"prompt: {prompt_1}\nstep: {num_inference_steps}\nstrength: {strength}\nguidance_scale: {guidance_scale}\nseed: {seed}")
+  image_1 = generate_image(prompt_2, init_image_1, num_inference_steps_1, strength_1, guidance_scale_1)
 
-  num_inference_steps_2 = int(35)
+  print(f"prompt: {prompt_2}\nstep: {num_inference_steps_1}\nstrength: {strength_1}\nguidance_scale: {guidance_scale_1}")
+
+  image_1.save("sd_1.png")
+  
+
+  num_inference_steps_2 = int(30)
   strength_2 = 0.65
-  guidance_scale_2 = 7
+  guidance_scale_2 = 7.5
 
-  with autocast("cuda"):
-    image = pipe(
-        prompt = "ultra detailed, photorealistic, " + prompt_1 + " high detail, high quality, 8K, photo realism",
-        negative_prompt = "lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature",
-        image = init_image_2,
-        num_inference_steps = num_inference_steps_2,
-        strength = strength_2,
-        guidance_scale = guidance_scale_2,
-        generator = torch.Generator("cuda").manual_seed(seed)).images
-    print(f"prompt: {prompt_2}\nstep: {num_inference_steps_2}\nstrength: {strength_2}\nguidance_scale: {guidance_scale_2}\nseed: {seed}")
+  image_2 = generate_image(prompt_1, init_image_2, num_inference_steps_2, strength_2, guidance_scale_2)
 
-    image[0].save("sd_2.png")
+  image_3 = generate_image(prompt_1, image_2, num_inference_steps_2, strength_2, guidance_scale_2)
+  print(f"prompt: {prompt_1}\nstep: {num_inference_steps_2}\nstrength: {strength_2}\nguidance_scale: {guidance_scale_2}")
+
+  image_2.save("sd_2.png")
+  image_3.save("sd_3.png")
+
