@@ -11,6 +11,7 @@ from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, S
 from diffusers import PNDMScheduler, DDIMScheduler, LMSDiscreteScheduler, EulerDiscreteScheduler, DPMSolverMultistepScheduler
 from diffusers import LMSDiscreteScheduler
 from PIL import Image
+import random
 from clip_interrogator import Config, Interrogator
 
 prompt_1 = "a man in black jacket and is holding cell phone, boromir an anime world, trade offer meme, headshot profile picture, one onion ring, espn, facebook lizard tongue, he got big french musctache, point finger with ring on it, tessgarman, icon, uhq, sun down, kombi"
@@ -77,7 +78,7 @@ if __name__ == "__main__":
   #model_id = 'stabilityai/stable-diffusion-2'
   model_id = "dreamlike-art/dreamlike-photoreal-2.0"
 
-  scheduler = None #DPMSolverMultistepScheduler.from_pretrained(model_id, subfolder="scheduler")
+  scheduler = DPMSolverMultistepScheduler.from_pretrained(model_id, subfolder="scheduler")
 
   pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
       model_id,
@@ -97,7 +98,7 @@ if __name__ == "__main__":
 
   #print(prompt_1)
   #print(prompt_2)
-
+  seed = random.randint(0, 2147483647)
   with autocast("cuda"):
     image = pipe(
         prompt = "ultra detailed, photorealistic, " + prompt_2 + " high detail, high quality,8K,photo realism",
@@ -105,7 +106,9 @@ if __name__ == "__main__":
         image = init_image_1,
         num_inference_steps = int(35),
         strength = 0.65,
-        guidance_scale = 7).images
+        guidance_scale = 7,
+        generator = torch.Generator("cuda").manual_seed(seed)).images
+    print(f"prompt: {prompt}\nstep: {num_inference_steps}\nstrength: {strength}\nguidance_scale: {guidance_scale}")
     image[0].save("sd_1.png")
 
   with autocast("cuda"):
@@ -115,5 +118,8 @@ if __name__ == "__main__":
         image = init_image_2,
         num_inference_steps = int(35),
         strength = 0.65,
-        guidance_scale = 7).images
+        guidance_scale = 7,
+        generator = torch.Generator("cuda").manual_seed(seed)).images
+    print(f"prompt: {prompt}\nstep: {num_inference_steps}\nstrength: {strength}\nguidance_scale: {guidance_scale}\nseed: {seed}")
+
     image[0].save("sd_2.png")
