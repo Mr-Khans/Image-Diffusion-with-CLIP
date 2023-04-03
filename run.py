@@ -122,11 +122,8 @@ if __name__ == "__main__":
   num_inference_steps_1 = int(30)
   strength_1 = 0.75
   guidance_scale_1 = 7.5
-
   image_1 = generate_image(prompt_2, init_image_1, num_inference_steps_1, strength_1, guidance_scale_1)
-
   print(f"prompt: {prompt_2}\nstep: {num_inference_steps_1}\nstrength: {strength_1}\nguidance_scale: {guidance_scale_1}")
-
   image_1.save("sd_1.png")
   
 
