@@ -14,10 +14,6 @@ from PIL import Image
 import random
 from clip_interrogator import Config, Interrogator
 
-prompt_1 = "a man in black jacket and is holding cell phone, boromir an anime world, trade offer meme, headshot profile picture, one onion ring, espn, facebook lizard tongue, he got big french musctache, point finger with ring on it, tessgarman, icon, uhq, sun down, kombi"
-prompt_2 = "a green monsterfruit with pear tree in the background, shrek as neo from matrix, he looks like human minion, fbx, square, she has jiggly fat round belly, avatar image, old male, murky dusty deep, photo pinterest, sfw version, standing class, giga chad capaybara, video game"
-  
-
 def proof_text(prompt: str) -> str:
     """
     This function takes in a string prompt and returns a processed version of the prompt.
