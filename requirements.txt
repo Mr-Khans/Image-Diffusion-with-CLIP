@@ -12,3 +12,4 @@ clip-interrogator==0.6.0
 accelerate
 xformers==0.0.16rc425
 triton
+
